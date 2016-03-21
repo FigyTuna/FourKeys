@@ -5,7 +5,10 @@ import sys
 from pygame.locals import *
 
 
+
 print('A test. Use q and w to test sounds.')
+pygame.mixer.pre_init(44100, -16, 2, 512)
+pygame.mixer.init()
 pygame.init()
 
 zone = pygame.display.set_mode((600,400))
@@ -15,13 +18,9 @@ time = 0
 font = pygame.font.Font('freesansbold.ttf', 32)
 
 beep1 = pygame.mixer.Sound('beep1.ogg')
-beep1.play()
 beep2 = pygame.mixer.Sound('beep2.ogg')
-beep2.play()
 beep3 = pygame.mixer.Sound('beep3.ogg')
-beep3.play()
 beep4 = pygame.mixer.Sound('beep4.ogg')
-beep4.play()
 
 note1 = 0
 note2 = 0
@@ -39,7 +38,7 @@ while True:
         
         keys = pygame.key.get_pressed()
         
-        if event.type == QUIT:
+        if event.type == QUIT or keys[pygame.K_z]:
             pygame.quit()
             sys.exit()
 
