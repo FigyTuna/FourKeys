@@ -3,8 +3,7 @@
 import pygame
 import sys
 from pygame.locals import *
-
-
+            
 
 print('A test. Use q and w to test sounds.')
 pygame.mixer.pre_init(44100, -16, 2, 512)
