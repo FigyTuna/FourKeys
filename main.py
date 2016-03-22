@@ -83,15 +83,24 @@ class Controller:
 
         if(self.timer > DELAY and not self.played):
 
-            print(str(self.keys[0].state + self.keys[1].state + self.keys[2].state + self.keys[3].state))
             self.played = True
-            return self.currentOutput
+            return self.currentOutput()
 
         return 0
 
     def currentOutput(self):
 
-        print("L")
+        key = self.mode.get(self.keys[3].state +
+                            self.keys[2].state * 2 +
+                            self.keys[1].state * 4 +
+                            self.keys[0].state * 8)
+
+        octave = (self.keys[4].state * (-1) +
+                  self.keys[5].state)
+
+        key = key + octave * 12 + 12
+
+        return key
 
     def noteIsDown(self):
 
@@ -148,7 +157,7 @@ beep4 = pygame.mixer.Sound('Test/beep4.ogg')
 note1 = Note("beep1", beep1)
 note2 = Note("beep2", beep2)
 
-c = Controller(0)
+c = Controller(MINOR)
 
 #---
 
@@ -175,9 +184,11 @@ while True:
 
     c.render()
 
-    if(c.step() == 1):
+    output = c.step()
 
-        beep1.play()
+    if(output != 0):
+
+        print(str(output))
     
     pygame.display.update()
 
