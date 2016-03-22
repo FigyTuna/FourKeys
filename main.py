@@ -4,7 +4,21 @@ import pygame
 import sys
 from pygame.locals import *
 
-DELAY = 4
+class Mode:
+
+    def __init__(self, modeFile):
+
+        self.arr = []
+
+        f = open(modeFile, 'r')
+
+        for i in range(0, 16):
+
+            self.arr.append(int(f.readline()))
+
+    def get(self, key):
+
+        return self.arr[key]
 
 class Key:
 
@@ -71,9 +85,13 @@ class Controller:
 
             print(str(self.keys[0].state + self.keys[1].state + self.keys[2].state + self.keys[3].state))
             self.played = True
-            return 1
+            return self.currentOutput
 
         return 0
+
+    def currentOutput(self):
+
+        print("L")
 
     def noteIsDown(self):
 
@@ -105,6 +123,9 @@ class Instrument:
 
         self.modulation = 0
 
+
+DELAY = 4
+MINOR = Mode("Modes/minor.txt")
 
 print('q, w, o, p, s, l. Testing buttons. z to quit.')
 pygame.mixer.pre_init(44100, -16, 2, 512)
