@@ -11,15 +11,11 @@ class Key:
     def __init__(self, x):
 
         self.xPos = x
-        self.state = 0
+        self.state = False
 
-    def press(self):
+    def setState(self, state):
 
-        self.state = 1
-        
-    def clear(self):
-        
-        self.state = 0
+        self.state = state
 
     def render(self):
 
@@ -32,9 +28,34 @@ class Controller:
     #Handles input methods
     #provides an output "note" which may be modified later
 
-    def __init__(self):
+    def __init__(self, mode):
 
-        print("Placeholder")
+        self.mode = mode
+
+        self.key_1 = Key(50)
+        self.key_2 = Key(80)
+        self.key_3 = Key(110)
+        self.key_4 = Key(140)
+        self.key_o1 = Key(200)
+        self.key_o2 = Key(230)
+
+    def setState(self, k1, k2, k3, k4, k5, k6):
+
+        self.key_1.setState(k1)
+        self.key_2.setState(k2)
+        self.key_3.setState(k3)
+        self.key_4.setState(k4)
+        self.key_o1.setState(k5)
+        self.key_o2.setState(k6)
+
+    def render(self):
+
+        self.key_1.render()
+        self.key_2.render()
+        self.key_3.render()
+        self.key_4.render()
+        self.key_o1.render()
+        self.key_o2.render()
 
 class Note:
 
@@ -57,7 +78,7 @@ class Instrument:
         self.modulation = 0
 
 
-print('A test. Use q and w to test sounds.')
+print('q, w, o, p, s, l. Testing buttons. z to quit.')
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.mixer.init()
 pygame.init()
@@ -78,8 +99,7 @@ beep4 = pygame.mixer.Sound('Test/beep4.ogg')
 note1 = Note("beep1", beep1)
 note2 = Note("beep2", beep2)
 
-key1 = Key(50)
-key2 = Key(80)
+c = Controller(0)
 
 #---
 
@@ -97,20 +117,16 @@ while True:
             pygame.quit()
             sys.exit()
 
-        if keys[pygame.K_q]:
-            key1.press()
-            note1.play()
-        if keys[pygame.K_w]:
-            key2.press()
-            note2.play()
+        c.setState(keys[pygame.K_q],
+                   keys[pygame.K_w],
+                   keys[pygame.K_o],
+                   keys[pygame.K_p],
+                   keys[pygame.K_s],
+                   keys[pygame.K_l])
 
-    key1.render()
-    key2.render()
-
+    c.render()
+    
     pygame.display.update()
-
-    key1.clear()
-    key2.clear()
 
     clock.tick(60)
     time = time + 1
