@@ -4,7 +4,7 @@ import pygame
 import sys
 from pygame.locals import *
 
-#Add one more class possibly for keys using GPIO
+DELAY = 4
 
 class Key:
 
@@ -19,7 +19,7 @@ class Key:
 
     def render(self):
 
-        self.text = font.render(str(self.state), True, (0, 0, 255))
+        self.text = font.render(str(self.state), True, (0, 0, 255))#Temporary test stuff
         zone.blit(self.text, (self.xPos, 300))
 
 class Controller:
@@ -33,10 +33,11 @@ class Controller:
         self.mode = mode
 
         self.timer = 0
+        self.played = False
 
         self.keys = []
 
-        self.keys.append(Key(50))
+        self.keys.append(Key(50))#Temp values
         self.keys.append(Key(80))
         self.keys.append(Key(110))
         self.keys.append(Key(140))
@@ -55,9 +56,28 @@ class Controller:
 
             self.keys[i].render()
 
+    def step(self):
+
+        if(self.noteIsDown()):
+
+            self.timer += 1
+
+        else:
+
+            self.timer = 0
+            self.played = False
+
+        if(self.timer > DELAY and not self.played):
+
+            print(str(self.keys[0].state + self.keys[1].state + self.keys[2].state + self.keys[3].state))
+            self.played = True
+            return 1
+
+        return 0
+
     def noteIsDown(self):
 
-        for i in range(0, 6):
+        for i in range(0, 4):
 
             if(self.keys[i].state):
 
@@ -133,6 +153,10 @@ while True:
                    keys[pygame.K_l]])
 
     c.render()
+
+    if(c.step() == 1):
+
+        beep1.play()
     
     pygame.display.update()
 
