@@ -32,30 +32,38 @@ class Controller:
 
         self.mode = mode
 
-        self.key_1 = Key(50)
-        self.key_2 = Key(80)
-        self.key_3 = Key(110)
-        self.key_4 = Key(140)
-        self.key_o1 = Key(200)
-        self.key_o2 = Key(230)
+        self.timer = 0
 
-    def setState(self, k1, k2, k3, k4, k5, k6):
+        self.keys = []
 
-        self.key_1.setState(k1)
-        self.key_2.setState(k2)
-        self.key_3.setState(k3)
-        self.key_4.setState(k4)
-        self.key_o1.setState(k5)
-        self.key_o2.setState(k6)
+        self.keys.append(Key(50))
+        self.keys.append(Key(80))
+        self.keys.append(Key(110))
+        self.keys.append(Key(140))
+        self.keys.append(Key(200))
+        self.keys.append(Key(230))
+
+    def setState(self, k = []):
+
+        for i in range(0, 6):
+
+            self.keys[i].setState(k[i])
 
     def render(self):
 
-        self.key_1.render()
-        self.key_2.render()
-        self.key_3.render()
-        self.key_4.render()
-        self.key_o1.render()
-        self.key_o2.render()
+        for i in range(0, 6):
+
+            self.keys[i].render()
+
+    def noteIsDown(self):
+
+        for i in range(0, 6):
+
+            if(self.keys[i].state):
+
+                return True
+
+        return False
 
 class Note:
 
@@ -117,12 +125,12 @@ while True:
             pygame.quit()
             sys.exit()
 
-        c.setState(keys[pygame.K_q],
+        c.setState([keys[pygame.K_q],
                    keys[pygame.K_w],
                    keys[pygame.K_o],
                    keys[pygame.K_p],
                    keys[pygame.K_s],
-                   keys[pygame.K_l])
+                   keys[pygame.K_l]])
 
     c.render()
     
