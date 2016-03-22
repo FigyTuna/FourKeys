@@ -16,10 +16,10 @@ time = 0
 
 font = pygame.font.Font('freesansbold.ttf', 32)
 
-beep1 = pygame.mixer.Sound('beep1.ogg')
-beep2 = pygame.mixer.Sound('beep2.ogg')
-beep3 = pygame.mixer.Sound('beep3.ogg')
-beep4 = pygame.mixer.Sound('beep4.ogg')
+beep1 = pygame.mixer.Sound('Test/beep1.ogg')
+beep2 = pygame.mixer.Sound('Test/beep2.ogg')
+beep3 = pygame.mixer.Sound('Test/beep3.ogg')
+beep4 = pygame.mixer.Sound('Test/beep4.ogg')
 
 note1 = 0
 note2 = 0
