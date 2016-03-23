@@ -133,7 +133,7 @@ class Instrument:
         self.modulation = mod
         self.notes = []
 
-        for i in range(0, (12 * 5)):
+        for i in range(0, (12 * 5) + 1):
 
             self.notes.append(Note("Temp", (str(folder) + "/" + str(i + 1) + ".wav")))
 
