@@ -3,12 +3,22 @@
 import pygame
 import sys
 from pygame.locals import *
-import keys_classes as k
+import RPi.GPIO as GPIO
+import keys_classes as K
 
 
-MINOR = k.Mode("Modes/minor.txt")
+MINOR = K.Mode("Modes/minor.txt")
+#17, 27, 22, 23, 24, 25
+button = [24, 23, 17, 27, 25, 22]
 
-print('q, w, o, p, s, l. Testing buttons. z to quit.')
+GPIO.setmode(GPIO.BCM)
+
+for i in range(0, 6):
+
+    GPIO.setup(button[i], GPIO.IN, pull_up_down = GPIO.PUD_UP)
+#GPIO.add_event_detect(button, GPIO.RISING)
+
+
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.mixer.init()
 pygame.init()
@@ -26,10 +36,10 @@ beep2 = pygame.mixer.Sound('Test/beep2.ogg')
 beep3 = pygame.mixer.Sound('Test/beep3.ogg')
 beep4 = pygame.mixer.Sound('Test/beep4.ogg')
 
-note1 = k.Note("beep1", beep1)
-note2 = k.Note("beep2", beep2)
+note1 = K.Note("beep1", beep1)#Test stuff
+note2 = K.Note("beep2", beep2)
 
-c = k.Controller(MINOR)
+c = K.Controller(MINOR)
 
 #---
 
@@ -47,12 +57,21 @@ while True:
             pygame.quit()
             sys.exit()
 
-        c.setState([keys[pygame.K_q],
-                   keys[pygame.K_w],
-                   keys[pygame.K_o],
-                   keys[pygame.K_p],
-                   keys[pygame.K_s],
-                   keys[pygame.K_l]])
+        #For keyboard input when GPIO not in use
+        #c.setState([keys[pygame.K_q],
+        #            keys[pygame.K_q],
+        #            keys[pygame.K_q],
+        #            keys[pygame.K_q],
+        #            keys[pygame.K_q],
+        #            keys[pygame.K_q])
+
+    # + 1 % 2 for weird backwards inputs
+    c.setState([(GPIO.input(button[0]) + 1) % 2,
+                (GPIO.input(button[1]) + 1) % 2,
+                GPIO.input(button[2]),
+                GPIO.input(button[3]),
+                (GPIO.input(button[4]) + 1) % 2,
+                GPIO.input(button[5])])
 
     c.render(font, zone)
 
