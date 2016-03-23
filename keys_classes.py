@@ -98,7 +98,7 @@ class Controller:
         octave = (self.keys[4].state * (-1) +
                   self.keys[5].state)
 
-        key = key + octave * 12 + 12
+        key = key + octave * 12 + (12 * 2)
 
         return key
 
@@ -117,7 +117,7 @@ class Note:
     def __init__(self, name, soundFile):
 
         self.name = name #May not be necessary
-        self.soundFile = soundFile
+        self.soundFile = pygame.mixer.Sound(soundFile)
 
     def play(self):
 
@@ -128,6 +128,15 @@ class Instrument:
     #Holds all notes
     #Handles modulation
 
-    def __init__(self):
+    def __init__(self, mod, folder):
 
-        self.modulation = 0
+        self.modulation = mod
+        self.notes = []
+
+        for i in range(0, (12 * 5)):
+
+            self.notes.append(Note("Temp", (str(folder) + "/" + str(i + 1) + ".wav")))
+
+    def play(self, key):
+
+        self.notes[key + self.modulation].play()

@@ -31,15 +31,16 @@ font = pygame.font.Font('freesansbold.ttf', 32)
 
 #Test stuff
 
-beep1 = pygame.mixer.Sound('Test/beep1.ogg')
-beep2 = pygame.mixer.Sound('Test/beep2.ogg')
-beep3 = pygame.mixer.Sound('Test/beep3.ogg')
-beep4 = pygame.mixer.Sound('Test/beep4.ogg')
+beep1 = 'Test/beep1.ogg'
+beep2 = 'Test/beep2.ogg'
+beep3 = 'Test/beep3.ogg'
+beep4 = 'Test/beep4.ogg'
 
 note1 = K.Note("beep1", beep1)#Test stuff
 note2 = K.Note("beep2", beep2)
 
 c = K.Controller(MINOR)
+p = K.Instrument(0, "Piano")
 
 #---
 
@@ -80,6 +81,7 @@ while True:
     if(output != 0):
 
         print(str(output))
+        p.play(output)
     
     pygame.display.update()
 
