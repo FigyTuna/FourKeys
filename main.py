@@ -80,7 +80,7 @@ while True:
 
     if(output != 0):
 
-        print(str(output))
+        print(str(p.notes[output].name))
         p.play(output)
     
     pygame.display.update()

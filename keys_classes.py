@@ -3,6 +3,7 @@ import sys
 from pygame.locals import *
 
 DELAY = 4
+NOTE_NAMES = ["a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#"]
 
 class Mode:
 
@@ -135,7 +136,7 @@ class Instrument:
 
         for i in range(0, (12 * 5) + 1):
 
-            self.notes.append(Note("Temp", (str(folder) + "/" + str(i + 1) + ".wav")))
+            self.notes.append(Note(NOTE_NAMES[(i - 1) % 12], (str(folder) + "/" + str(i + 1) + ".wav")))
 
     def play(self, key):
 
