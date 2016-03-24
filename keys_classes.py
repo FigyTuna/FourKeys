@@ -5,6 +5,13 @@ from pygame.locals import *
 DELAY = 4
 NOTE_NAMES = ["a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#"]
 
+I_ON = pygame.image.load('Images/on.png')
+I_OFF = pygame.image.load('Images/off.png')
+I_HIT = pygame.image.load('Images/hit.png')
+I_O_ON = pygame.image.load('Images/onoctave.png')
+I_O_OFF = pygame.image.load('Images/offoctave.png')
+I_O_HIT = pygame.image.load('Images/hitoctave.png')
+
 class Mode:
 
     def __init__(self, modeFile):
@@ -23,9 +30,11 @@ class Mode:
 
 class Key:
 
-    def __init__(self, x):
+    def __init__(self, x, y, octave):
 
         self.xPos = x
+        self.yPos = y
+        self.octave = octave
         self.state = False
 
     def setState(self, state):
@@ -35,7 +44,19 @@ class Key:
     def render(self, font, screen):
 
         text = font.render(str(self.state), True, (0, 0, 255))#Temporary test stuff
-        screen.blit(text, (self.xPos, 300))
+
+        display = I_OFF
+
+        if self.octave:
+            display = I_O_OFF
+        
+        if self.state and not self.octave:
+            display = I_ON
+            
+        if self.state and self.octave:
+            display = I_O_ON
+            
+        screen.blit(display, (self.xPos, self.yPos))
 
 class Controller:
 
@@ -43,7 +64,7 @@ class Controller:
     #Handles input methods
     #provides an output "note" which may be modified later
 
-    def __init__(self, mode):
+    def __init__(self, mode, x = 140, y = 300):
 
         self.mode = mode
 
@@ -52,12 +73,12 @@ class Controller:
 
         self.keys = []
 
-        self.keys.append(Key(50))#Temp values
-        self.keys.append(Key(80))
-        self.keys.append(Key(110))
-        self.keys.append(Key(140))
-        self.keys.append(Key(200))
-        self.keys.append(Key(230))
+        self.keys.append(Key(x, y, False))
+        self.keys.append(Key(x + 80, y, False))
+        self.keys.append(Key(x + 160, y, False))
+        self.keys.append(Key(x + 240, y, False))
+        self.keys.append(Key(x, y + 50, True))
+        self.keys.append(Key(x + 160, y + 50, True))
 
     def setState(self, k = []):
 

@@ -48,7 +48,7 @@ clock = pygame.time.Clock()
 
 while True:
 
-    zone.fill((100, 200, 0))
+    zone.fill((52, 154, 227))
 
     for event in pygame.event.get():
         
