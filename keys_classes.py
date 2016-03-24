@@ -28,6 +28,16 @@ class Mode:
 
         return self.arr[key]
 
+    def getBack(self, note):
+
+        for i in range(0, 16):
+
+            if(self.arr[i] % 12 == note % 12):
+
+                return i
+
+        return 0
+
 
 MODES = [Mode("Modes/minor.txt"),
          Mode("Modes/major.txt")]
@@ -168,6 +178,16 @@ class Instrument:
 
         self.notes[key + self.modulation].play()
 
+    def getBack(self, note):
+
+        for i in range(0, len(self.notes)):
+
+            if self.notes[i].name + "\n" == note:
+
+                return i
+            
+        return 0#a0
+
     def display(self, key):
 
         print(self.notes[key + self.modulation].name)
@@ -193,6 +213,10 @@ class Song:
                 break
 
             self.arr.append(line)
+
+        for i in range(0, len(self.arr)):
+
+            print(str(self.controller.mode.getBack(self.instrument.getBack(self.arr[i]))))
 
     def override(self, mode, mod):
 
