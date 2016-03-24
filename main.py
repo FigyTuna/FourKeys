@@ -18,7 +18,6 @@ for i in range(0, 6):
 
     GPIO.setup(button[i], GPIO.IN, pull_up_down = GPIO.PUD_UP)
 
-
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.mixer.init()
 pygame.init()
@@ -29,7 +28,7 @@ time = 0
 
 font = pygame.font.Font('freesansbold.ttf', 32)
 
-c = K.Controller(MINOR)
+c = K.Controller(MAJOR)
 p = K.Instrument(0, "Piano")
 
 #---
@@ -70,7 +69,7 @@ while True:
 
     if(output != 0):
 
-        print(str(p.notes[output].name))
+        p.display(output)
         p.play(output)
     
     pygame.display.update()

@@ -138,7 +138,7 @@ class Note:
 
     def __init__(self, name, soundFile):
 
-        self.name = name #May not be necessary
+        self.name = name
         self.soundFile = pygame.mixer.Sound(soundFile)
 
     def play(self):
@@ -157,8 +157,30 @@ class Instrument:
 
         for i in range(0, (12 * 5) + 1):
 
-            self.notes.append(Note(NOTE_NAMES[(i - 1) % 12], (str(folder) + "/" + str(i + 1) + ".wav")))
+            self.notes.append(Note(NOTE_NAMES[(i - 1) % 12] + str(((i - 4) / 12) + 1),
+                                   (str(folder) + "/" + str(i) + ".wav")))
 
     def play(self, key):
 
         self.notes[key + self.modulation].play()
+
+    def display(self, key):
+
+        print(self.notes[key + self.modulation].name)
+
+class Song:
+
+    def __init__(self, file):
+
+        print ("PLaceholder")
+
+
+
+
+
+
+
+
+
+
+
