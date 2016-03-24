@@ -11,6 +11,7 @@ I_HIT = pygame.image.load('Images/hit.png')
 I_O_ON = pygame.image.load('Images/onoctave.png')
 I_O_OFF = pygame.image.load('Images/offoctave.png')
 I_O_HIT = pygame.image.load('Images/hitoctave.png')
+I_INV = pygame.image.load("Images/invisible.png")
 
 class Mode:
 
@@ -30,7 +31,7 @@ class Mode:
 
     def getBack(self, note):
 
-        for i in range(0, 16):
+        for i in range(1, 16):
 
             if(self.arr[i] % 12 == note % 12):
 
@@ -44,31 +45,31 @@ MODES = [Mode("Modes/minor.txt"),
 
 class Key:
 
-    def __init__(self, x, y, octave):
+    def __init__(self, x, y, on, off):
 
         self.xPos = x
         self.yPos = y
-        self.octave = octave
+        self.on = on
+        self.off = off
         self.state = False
 
     def setState(self, state):
 
         self.state = state
 
+    def updatePos(self, x, y):
+
+        self.x = x
+        self.y = y
+
     def render(self, font, screen):
 
         text = font.render(str(self.state), True, (0, 0, 255))#Temporary test stuff
 
-        display = I_OFF
-
-        if self.octave:
-            display = I_O_OFF
+        display = self.off
         
-        if self.state and not self.octave:
-            display = I_ON
-            
-        if self.state and self.octave:
-            display = I_O_ON
+        if self.state:
+            display = self.on
             
         screen.blit(display, (self.xPos, self.yPos))
 
@@ -87,12 +88,12 @@ class Controller:
 
         self.keys = []
 
-        self.keys.append(Key(x, y, False))
-        self.keys.append(Key(x + 80, y, False))
-        self.keys.append(Key(x + 160, y, False))
-        self.keys.append(Key(x + 240, y, False))
-        self.keys.append(Key(x, y + 50, True))
-        self.keys.append(Key(x + 160, y + 50, True))
+        self.keys.append(Key(x, y, I_ON, I_OFF))
+        self.keys.append(Key(x + 80, y, I_ON, I_OFF))
+        self.keys.append(Key(x + 160, y, I_ON, I_OFF))
+        self.keys.append(Key(x + 240, y, I_ON, I_OFF))
+        self.keys.append(Key(x, y + 50, I_O_ON, I_O_OFF))
+        self.keys.append(Key(x + 160, y + 50, I_O_ON, I_O_OFF))
 
     def setState(self, k = []):
 
@@ -184,7 +185,7 @@ class Instrument:
 
             if self.notes[i].name + "\n" == note:
 
-                return i
+                return i#Needs +- mod
             
         return 0#a0
 
@@ -199,6 +200,7 @@ class Song:
         self.font = font
         self.zone = zone
         self.arr = []
+        self.hits = []
 
         f = open(songFile, 'r')
 
@@ -216,7 +218,7 @@ class Song:
 
         for i in range(0, len(self.arr)):
 
-            print(str(self.controller.mode.getBack(self.instrument.getBack(self.arr[i]))))
+            self.hits.append(Hit(self.controller.mode.getBack(self.instrument.getBack(self.arr[i]))), 140, 100 * i)
 
     def override(self, mode, mod):
 
@@ -236,7 +238,28 @@ class Song:
             self.instrument.display(output)
             self.instrument.play(output)
 
-        
+class Hit:
+
+    def __init__(self, binNum, x, y):
+
+        self.arr = []
+
+        self.arr.append(binNum / 8)
+        binNum = binNum % 8
+        self.arr.append(binNum / 4)
+        binNum = binNum % 4
+        self.arr.append(binNum / 2)
+        binNum = binNum % 2
+        self.arr.append(binNum)
+
+        self.keys = []
+
+        self.keys.append(Key(x, y, I_HIT, I_INV))
+        self.keys.append(Key(x + 80, y, I_HIT, I_INV))
+        self.keys.append(Key(x + 160, y, I_HIT, I_INV))
+        self.keys.append(Key(x + 240, y, I_HIT, I_INV))
+        self.keys.append(Key(x, y + 50, I_O_HIT, I_O_INV))
+        self.keys.append(Key(x + 160, y + 50, I_O_HIT, I_O_INV))
 
 
 
