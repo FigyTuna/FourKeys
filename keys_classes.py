@@ -28,6 +28,10 @@ class Mode:
 
         return self.arr[key]
 
+
+MODES = [Mode("Modes/minor.txt"),
+         Mode("Modes/major.txt")]
+
 class Key:
 
     def __init__(self, x, y, octave):
@@ -170,15 +174,45 @@ class Instrument:
 
 class Song:
 
-    def __init__(self, file):
+    def __init__(self, font, zone, songFile):
 
-        print ("PLaceholder")
+        self.font = font
+        self.zone = zone
+        self.arr = []
 
+        f = open(songFile, 'r')
 
+        #Abstract maybe later
+        self.controller = Controller(MODES[int(f.readline())])
+        self.instrument = Instrument(int(f.readline()), "Piano")
 
+        while True:
 
+            line = f.readline()
+            if not line:
+                break
 
+            self.arr.append(line)
 
+    def override(self, mode, mod):
+
+        self.controller.mode = mode
+        self.instrument.modulation = mod
+
+    def step(self, b1, b2, b3, b4, b5, b6):
+
+        self.controller.setState([b1, b2, b3, b4, b5, b6])
+
+        self.controller.render(self.font, self.zone)
+
+        output = self.controller.step()
+
+        if(output != 0):
+
+            self.instrument.display(output)
+            self.instrument.play(output)
+
+        
 
 
 
