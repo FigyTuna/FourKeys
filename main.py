@@ -8,6 +8,7 @@ import keys_classes as K
 
 
 MINOR = K.Mode("Modes/minor.txt")
+MAJOR = K.Mode("Modes/major.txt")
 #17, 27, 22, 23, 24, 25
 button = [24, 23, 17, 27, 25, 22]
 
@@ -16,7 +17,6 @@ GPIO.setmode(GPIO.BCM)
 for i in range(0, 6):
 
     GPIO.setup(button[i], GPIO.IN, pull_up_down = GPIO.PUD_UP)
-#GPIO.add_event_detect(button, GPIO.RISING)
 
 
 pygame.mixer.pre_init(44100, -16, 2, 512)
@@ -28,16 +28,6 @@ zone = pygame.display.set_mode((600,400))
 time = 0
 
 font = pygame.font.Font('freesansbold.ttf', 32)
-
-#Test stuff
-
-beep1 = 'Test/beep1.ogg'
-beep2 = 'Test/beep2.ogg'
-beep3 = 'Test/beep3.ogg'
-beep4 = 'Test/beep4.ogg'
-
-note1 = K.Note("beep1", beep1)#Test stuff
-note2 = K.Note("beep2", beep2)
 
 c = K.Controller(MINOR)
 p = K.Instrument(0, "Piano")
