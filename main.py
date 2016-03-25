@@ -57,6 +57,9 @@ while True:
             pygame.quit()
             sys.exit()
 
+        if keys[pygame.K_f]:
+            s.moveDown()
+
         #For keyboard input when GPIO not in use
         #s.step(keys[pygame.K_q],
         #       keys[pygame.K_w],

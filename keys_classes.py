@@ -15,6 +15,20 @@ I_INV = pygame.image.load("Images/invisible.png")
 
 HIT_SPACE = 130#pixels
 
+def getKeyOut(mode, keys = []):
+
+    key = mode.get(keys[3].state +
+                   keys[2].state * 2 +
+                   keys[1].state * 4 +
+                   keys[0].state * 8)
+
+    octave = (keys[4].state * (-1) +
+              keys[5].state)
+
+    key = key + octave * 12 + (12 * 2)
+
+    return key
+
 class Mode:
 
     def __init__(self, modeFile):
@@ -59,10 +73,9 @@ class Key:
 
         self.state = state
 
-    def updatePos(self, x, y):
+    def updatePos(self, y):
 
-        self.x = x
-        self.y = y
+        self.yPos = y
 
     def render(self, font, screen):
 
@@ -129,17 +142,7 @@ class Controller:
 
     def currentOutput(self):
 
-        key = self.mode.get(self.keys[3].state +
-                            self.keys[2].state * 2 +
-                            self.keys[1].state * 4 +
-                            self.keys[0].state * 8)
-
-        octave = (self.keys[4].state * (-1) +
-                  self.keys[5].state)
-
-        key = key + octave * 12 + (12 * 2)
-
-        return key
+        return getKeyOut(self.mode, self.keys)
 
     def noteIsDown(self):
 
@@ -187,7 +190,7 @@ class Instrument:
 
             if self.notes[i].name + "\n" == note:
 
-                return i#Needs +- mod
+                return i - self.modulation
             
         return 0#a0
 
@@ -218,11 +221,16 @@ class Song:
 
             self.arr.append(line)
 
-        for i in range(0, len(self.arr)):
+        for i in range(0, len(self.arr)):#clean this all up later
 
-            self.hits.append(Hit(self.controller.mode.getBack(self.instrument.getBack(self.arr[i])), 140, 300 - (HIT_SPACE * i)))
-
-        #self.hits[2].moveDown()#Test
+            self.hits.append(Hit(self.controller.mode.getBack(self.instrument.getBack(self.arr[i])),
+                                 140, 300 - (HIT_SPACE * i)))
+            if(self.instrument.getBack(self.arr[i]) == getKeyOut(self.controller.mode, self.hits[i].keys) - 12):
+                self.hits[i].setOctaves(1, 0)
+            elif(self.instrument.getBack(self.arr[i]) == getKeyOut(self.controller.mode, self.hits[i].keys) + 12):
+                self.hits[i].setOctaves(0, 1)
+            elif(self.instrument.getBack(self.arr[i]) != getKeyOut(self.controller.mode, self.hits[i].keys)):
+                self.hits[i].setOctaves(1, 1)
 
     def override(self, mode, mod):
 
@@ -246,6 +254,11 @@ class Song:
             self.instrument.display(output)
             self.instrument.play(output)
 
+    def moveDown(self):
+
+        for i in range(0, len(self.hits)):
+            self.hits[i].moveDown()
+
 class Hit:
 
     def __init__(self, binNum, x, y):
@@ -253,6 +266,7 @@ class Hit:
         self.animTime = 0
         self.x = x
         self.y = y
+        self.yo = y + 50
 
         self.arr = []
 
@@ -277,18 +291,33 @@ class Hit:
 
             self.keys[i].setState(self.arr[i])
 
+    def setOctaves(self, o1, o2):
+
+        self.arr.append(o1)
+        self.arr.append(o2)
+
+        self.keys[4].setState(self.arr[4])
+        self.keys[5].setState(self.arr[5])
+
     def render(self, font, screen):
 
-        for i in range(0, 6):
+        for i in range(0, 4):
 
-            self.keys[i].updatePos(self.x, self.y - self.animTime)
+            self.keys[i].updatePos(self.y - self.animTime)
             self.keys[i].render(font, screen)
 
-        self.animTime -= 1
+        for i in range(4, 6):#sloppy code quick fix
+
+            self.keys[i].updatePos(self.yo - self.animTime)
+            self.keys[i].render(font, screen)
+
+        self.animTime -= 12
+        if self.animTime < 0:
+            self.animTime = 0
 
     def moveDown(self):
 
         self.animTime = HIT_SPACE
         self.y += HIT_SPACE
-
+        self.yo += HIT_SPACE
 
