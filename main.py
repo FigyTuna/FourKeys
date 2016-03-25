@@ -5,9 +5,17 @@ import sys
 from pygame.locals import *
 import RPi.GPIO as GPIO
 import keys_classes as K
+import keys_settings
+
+if len(sys.argv) > 1:
+    if "settings" == sys.argv[1]:
+
+        keys_settings.settings()
+        sys.exit()
+                
 
 #17, 27, 22, 23, 24, 25
-button = [24, 23, 17, 27, 25, 22]
+button = keys_settings.readFile("settings.txt", 0, 6)
 
 GPIO.setmode(GPIO.BCM)
 
@@ -25,12 +33,12 @@ time = 0
 
 font = pygame.font.Font('freesansbold.ttf', 32)
 
-if(len(sys.argv) >= 2):
+if len(sys.argv) >= 2:
     s = K.Song(font, zone, "Songs/" + str(sys.argv[1]) + ".txt")
 else:
     s = K.Song(font, zone, "Songs/free.txt")
 
-if(len(sys.argv) == 4):
+if len(sys.argv) == 4:
     s.override(K.Mode("Modes/" + str(sys.argv[2]) + ".txt"), int(sys.argv[3]))
 
 #---
@@ -50,12 +58,12 @@ while True:
             sys.exit()
 
         #For keyboard input when GPIO not in use
-        #s.(keys[pygame.K_q],
-        #   keys[pygame.K_w],
-        #   keys[pygame.K_o],
-        #   keys[pygame.K_p],
-        #   keys[pygame.K_s],
-        #   keys[pygame.K_l])
+        #s.step(keys[pygame.K_q],
+        #       keys[pygame.K_w],
+        #       keys[pygame.K_o],
+        #       keys[pygame.K_p],
+        #       keys[pygame.K_s],
+        #       keys[pygame.K_l])
 
     # + 1 % 2 for weird backwards inputs
     s.step((GPIO.input(button[0]) + 1) % 2,

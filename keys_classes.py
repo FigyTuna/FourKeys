@@ -222,7 +222,7 @@ class Song:
 
             self.hits.append(Hit(self.controller.mode.getBack(self.instrument.getBack(self.arr[i])), 140, 300 - (HIT_SPACE * i)))
 
-        self.hits[2].moveDown()#Test
+        #self.hits[2].moveDown()#Test
 
     def override(self, mode, mod):
 
@@ -235,7 +235,7 @@ class Song:
 
         self.controller.render(self.font, self.zone)
 
-        for i in range(0, 5):
+        for i in range(0, len(self.hits)):
 
             self.hits[i].render(self.font, self.zone)
 
