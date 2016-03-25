@@ -13,6 +13,8 @@ I_O_OFF = pygame.image.load('Images/offoctave.png')
 I_O_HIT = pygame.image.load('Images/hitoctave.png')
 I_INV = pygame.image.load("Images/invisible.png")
 
+HIT_SPACE = 130#pixels
+
 class Mode:
 
     def __init__(self, modeFile):
@@ -218,7 +220,9 @@ class Song:
 
         for i in range(0, len(self.arr)):
 
-            self.hits.append(Hit(self.controller.mode.getBack(self.instrument.getBack(self.arr[i]))), 140, 100 * i)
+            self.hits.append(Hit(self.controller.mode.getBack(self.instrument.getBack(self.arr[i])), 140, 300 - (HIT_SPACE * i)))
+
+        self.hits[2].moveDown()#Test
 
     def override(self, mode, mod):
 
@@ -231,6 +235,10 @@ class Song:
 
         self.controller.render(self.font, self.zone)
 
+        for i in range(0, 5):
+
+            self.hits[i].render(self.font, self.zone)
+
         output = self.controller.step()
 
         if(output != 0):
@@ -241,6 +249,10 @@ class Song:
 class Hit:
 
     def __init__(self, binNum, x, y):
+
+        self.animTime = 0
+        self.x = x
+        self.y = y
 
         self.arr = []
 
@@ -258,10 +270,25 @@ class Hit:
         self.keys.append(Key(x + 80, y, I_HIT, I_INV))
         self.keys.append(Key(x + 160, y, I_HIT, I_INV))
         self.keys.append(Key(x + 240, y, I_HIT, I_INV))
-        self.keys.append(Key(x, y + 50, I_O_HIT, I_O_INV))
-        self.keys.append(Key(x + 160, y + 50, I_O_HIT, I_O_INV))
+        self.keys.append(Key(x, y + 50, I_O_HIT, I_INV))
+        self.keys.append(Key(x + 160, y + 50, I_O_HIT, I_INV))
 
+        for i in range(0, 4):
 
+            self.keys[i].setState(self.arr[i])
 
+    def render(self, font, screen):
+
+        for i in range(0, 6):
+
+            self.keys[i].updatePos(self.x, self.y - self.animTime)
+            self.keys[i].render(font, screen)
+
+        self.animTime -= 1
+
+    def moveDown(self):
+
+        self.animTime = HIT_SPACE
+        self.y += HIT_SPACE
 
 
