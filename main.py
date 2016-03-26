@@ -62,17 +62,6 @@ while True:
             pygame.quit()
             sys.exit()
 
-        if keys[pygame.K_f]:
-            s.moveDown()
-
-        #For keyboard input when GPIO not in use
-        #s.step(keys[pygame.K_q],
-        #       keys[pygame.K_w],
-        #       keys[pygame.K_o],
-        #       keys[pygame.K_p],
-        #       keys[pygame.K_s],
-        #       keys[pygame.K_l])
-
     # + 1 % 2 for weird backwards inputs
     s.step(GPIO.input(button[0]),
            GPIO.input(button[1]),

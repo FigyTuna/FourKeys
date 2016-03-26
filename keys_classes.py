@@ -79,8 +79,6 @@ class Key:
 
     def render(self, font, screen):
 
-        text = font.render(str(self.state), True, (0, 0, 255))#Temporary test stuff
-
         display = self.off
         
         if self.state:
@@ -103,7 +101,7 @@ class Controller:
 
         self.keys = []
 
-        self.keys.append(Key(x, y, I_ON, I_OFF))
+        self.keys.append(Key(x, y, I_ON, I_OFF))#Arrangement needs to be abstracted
         self.keys.append(Key(x + 80, y, I_ON, I_OFF))
         self.keys.append(Key(x + 160, y, I_ON, I_OFF))
         self.keys.append(Key(x + 240, y, I_ON, I_OFF))
@@ -175,7 +173,7 @@ class Instrument:
         self.modulation = mod
         self.notes = []
 
-        for i in range(0, (12 * 5) + 1):
+        for i in range(0, (12 * 5) + 1):#50 notes altogether
 
             self.notes.append(Note(NOTE_NAMES[(i - 1) % 12] + str(((i - 4) / 12) + 1),
                                    (str(folder) + "/" + str(i) + ".wav")))
