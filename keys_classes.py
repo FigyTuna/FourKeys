@@ -264,6 +264,10 @@ class Song:
         for i in range(0, len(self.hits)):
             self.hits[i].moveDown()
 
+    def restart(self):#unfinished
+
+        self.currentHit = 0
+
 class Hit:
 
     def __init__(self, binNum, x, y):
