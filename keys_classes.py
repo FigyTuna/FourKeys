@@ -2,7 +2,7 @@ import pygame
 import sys
 from pygame.locals import *
 
-DELAY = 4
+DELAY = 3
 NOTE_NAMES = ["a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#"]
 
 I_ON = pygame.image.load('Images/on.png')
@@ -206,6 +206,7 @@ class Song:
         self.zone = zone
         self.arr = []
         self.hits = []
+        self.currentHit = 0
 
         f = open(songFile, 'r')
 
@@ -245,7 +246,8 @@ class Song:
 
         for i in range(0, len(self.hits)):
 
-            self.hits[i].render(self.font, self.zone)
+            if i > self.currentHit - 2 and i < self.currentHit + 3:
+                self.hits[i].render(self.font, self.zone)
 
         output = self.controller.step()
 
@@ -253,6 +255,11 @@ class Song:
 
             self.instrument.display(output)
             self.instrument.play(output)
+
+        if self.currentHit < len(self.hits):
+            if output == getKeyOut(self.controller.mode, self.hits[self.currentHit].keys):
+                self.currentHit += 1
+                self.moveDown()
 
     def moveDown(self):
 
@@ -321,3 +328,25 @@ class Hit:
         self.y += HIT_SPACE
         self.yo += HIT_SPACE
 
+
+
+def readFile(fileName, start = 0, end = 100):
+
+    ret = []
+
+    i = 0
+
+    f = open(fileName, 'r')
+
+    while True:
+
+        line = f.readline()
+        if not line:
+            break
+
+        if i >= start and i < end:
+            ret.append(int(line))
+
+        i += 1
+
+    return ret

@@ -5,17 +5,22 @@ import sys
 from pygame.locals import *
 import RPi.GPIO as GPIO
 import keys_classes as K
-import keys_settings
 
-if len(sys.argv) > 1:
-    if "settings" == sys.argv[1]:
-
-        keys_settings.settings()
-        sys.exit()
-                
 
 #17, 27, 22, 23, 24, 25
-button = keys_settings.readFile("settings.txt", 0, 6)
+button = K.readFile("settings.txt", 0, 6)
+
+reverse = K.readFile("settings.txt", 6, 7)
+
+if 1 == reverse[0]:
+    for i in range(0, 2):
+        temp = button[i]
+        button[i] = button[3 - i]
+        button[3 - i] = temp
+
+    temp = button[4]
+    button[4]= button[5]
+    button[5] = temp
 
 GPIO.setmode(GPIO.BCM)
 
@@ -69,12 +74,12 @@ while True:
         #       keys[pygame.K_l])
 
     # + 1 % 2 for weird backwards inputs
-    s.step((GPIO.input(button[0]) + 1) % 2,
-           (GPIO.input(button[1]) + 1) % 2,
+    s.step(GPIO.input(button[0]),
+           GPIO.input(button[1]),
            GPIO.input(button[2]),
            GPIO.input(button[3]),
            (GPIO.input(button[4]) + 1) % 2,
-           GPIO.input(button[5]))
+           (GPIO.input(button[5]) + 1) % 2)
     
     pygame.display.update()
 
