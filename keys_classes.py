@@ -173,7 +173,7 @@ class Instrument:
         self.modulation = mod
         self.notes = []
 
-        for i in range(0, (12 * 5) + 1):#50 notes altogether
+        for i in range(1, (12 * 5) + 1):#50 notes altogether
 
             self.notes.append(Note(NOTE_NAMES[(i - 1) % 12] + str(((i - 4) / 12) + 1),
                                    (str(folder) + "/" + str(i) + ".wav")))
